@@ -36,21 +36,16 @@ scram build -j4
 > git remote add cmshi git@github.com:CmsHI/cmssw.git
 > ```
 
-### 1.3) Download ZDC emap
-```bash
-wget https://github.com/hjbossi/ZDCOnlineMonitoring/blob/main/Conditions/emap/emap_2025_full.txt
-```
-
-### 1.4) Clone this repository
-Navigate back to the folder with CMSSW:
-```bash
-cd ../../
-```
-
-Clone:
+### 1.3) Clone this repository
 ```bash
 git clone git@github.com:jdlang/HiForestSetupOORun2025.git
 cd HiForestSetupOORun2025/
+```
+
+### 1.4) Download ZDC emap and copy into src
+```bash
+wget https://github.com/hjbossi/ZDCOnlineMonitoring/blob/main/Conditions/emap/emap_2025_full.txt
+cp emap_2025_full.txt /path/to/CMSSW_15_0_9/src/
 ```
 
 --------------------------------------------------------------------------------
