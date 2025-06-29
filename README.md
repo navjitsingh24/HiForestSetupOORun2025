@@ -42,10 +42,10 @@ git clone git@github.com:jdlang/HiForestSetupOORun2025.git
 cd HiForestSetupOORun2025/
 ```
 
-### 1.4) Download ZDC emap and copy into src
+### 1.4) Download ZDC emap and copy into `CMSSW_15_0_9/src/HeavyIonsAnalysis/Configuration/data/`
 ```bash
 wget https://github.com/hjbossi/ZDCOnlineMonitoring/blob/main/Conditions/emap/emap_2025_full.txt
-cp emap_2025_full.txt /path/to/CMSSW_15_0_9/src/
+cp emap_2025_full.txt HeavyIonsAnalysis/Configuration/data/
 ```
 
 --------------------------------------------------------------------------------
@@ -55,26 +55,31 @@ cp emap_2025_full.txt /path/to/CMSSW_15_0_9/src/
 ### 2.0) Edit CRABConfig settings
 Make a **copy** of the CRABConfig file with an appropriate name:
 ```bash
-cp forest_CRABConfig_Run3_OO_DATA.py forest_CRABConfig_Run3_OO_DATA_<your_label>.py
+cp forest_CRABConfig_Run3_OO_DATA_TEMPLATE.py forest_CRABConfig_Run3_OO_DATA_<your_label>.py
 ```
 > [!TIP]
-> If you want to process over a list of files instead, use
-> `forest_CRABConfig_Run3_OO_DATA_filelist.py` as your template instead.
+> If you want to process over a local file or a list of files, use
+> `forest_CRABConfig_Run3_OO_DATA_filelist_TEMPLATE.py` as your template
+> instead. Save your file(s) to a `.txt` file using a command like:
+> ```bash
+> ls /path/to/files/*.root > filelist.txt
+> ```
 
-Modify the input and output paths in the config (shown below):
+Modify the input and output paths in the config (example shown below):
 ```Python
 # INPUT/OUTPUT SETTINGS
 
 jobTag = 'Run3_OO_IonPhysics_runXXXXXX'
-input = 'DAS_PATH'
-inputDatabase = 'global'
-output = '/store/group/phys_heavyions/' + username + '/Run3_OO_2025Data_FastPrivateReco/'
+input = '/DAS/Path/'
+inputDatabase = 'phys03'
+output = '/store/group/phys_heavyions/' + username + '/Run3_OO_2025Data_QuickForest/'
 outputServer = 'T2_CH_CERN'
 ```
 Explanation of variables:
 - `jobTag` is a personal label for differentiating samples.
 - `input` is the miniAOD path on [CMS DAS](https://cmsweb.cern.ch/das/).
-- `inputDatabase` is the DAS "dbs instance" that contains the files.
+- `inputDatabase` is the DAS "dbs instance" that contains the files
+  (typically `'global'` or `'phys03'`).
 - `output` is the path on the output server. Forested files are saved here.
 - `outputServer` is the CMS T2 server where data will be stored.
 
