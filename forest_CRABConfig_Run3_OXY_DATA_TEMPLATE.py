@@ -5,11 +5,11 @@ username = getUsername()
 ###############################################################################
 # INPUT/OUTPUT SETTINGS
 
-jobTag = 'Run3_OO_IonPhysics_runXXXXXX'
+jobTag = 'Run3_pO_IonPhysics_runXXXXXX'
 input = '/DAS/Path'
 #inputDatabase = 'global'
 inputDatabase = 'phys03'
-output = '/store/group/phys_heavyions/' + username + '/Run3_OO_2025Data_QuickForest/'
+output = '/store/group/phys_heavyions/' + username + '/Run3_pO_2025Data_QuickForest/'
 outputServer = 'T2_CH_CERN'
 
 ###############################################################################

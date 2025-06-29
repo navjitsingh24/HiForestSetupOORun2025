@@ -32,7 +32,7 @@ process.source = cms.Source("PoolSource",
 
 # number of events to process, set to -1 to process all events
 process.maxEvents = cms.untracked.PSet(
-    input = cms.untracked.int32(-1)
+    input = cms.untracked.int32(1000)
 )
 
 ###############################################################################
@@ -90,15 +90,23 @@ process.load('HeavyIonsAnalysis.EventAnalysis.l1object_cfi')
 # process.hiEvtAnalyzer.doCentrality = cms.bool(False) # for UPC
 ################################
 # electrons, photons, muons
-#process.load('HeavyIonsAnalysis.EGMAnalysis.ggHiNtuplizer_cfi')
-#process.ggHiNtuplizer.doMuons = cms.bool(False)
+process.load('HeavyIonsAnalysis.EGMAnalysis.ggHiNtuplizer_cfi')
+process.ggHiNtuplizer.doGenParticles = cms.bool(False)
+process.ggHiNtuplizer.doMuons = cms.bool(False)
+process.ggHiNtuplizer.useValMapIso = cms.bool(False) # True here causes seg fault
 process.load("TrackingTools.TransientTrack.TransientTrackBuilder_cfi")
+################################
+# jet reco sequence
+process.load('HeavyIonsAnalysis.JetAnalysis.ak4PFJetSequence_ppref_data_cff')
 ################################
 # tracks
 process.load("HeavyIonsAnalysis.TrackAnalysis.TrackAnalyzers_cff")
+process.ppTracks.dedxEstimators = cms.VInputTag(["dedxEstimator:dedxAllLikelihood", "dedxEstimator:dedxHarmonic2"])
 # muons
 process.load("HeavyIonsAnalysis.MuonAnalysis.unpackedMuons_cfi")
+process.unpackedMuons.muonSelectors = cms.vstring()
 process.load("HeavyIonsAnalysis.MuonAnalysis.muonAnalyzer_cfi")
+process.unpackedMuons.muonSelectors = cms.vstring()
 ###############################################################################
 
 #########################
@@ -144,11 +152,49 @@ process.forest = cms.Path(
     process.trackSequencePP +
     process.particleFlowAnalyser +
     process.hiEvtAnalyzer +
-    process.zdcSequencePbPb
-#    process.ggHiNtuplizer +
-#    process.unpackedMuons +
-#    process.muonAnalyzer
+    process.zdcSequencePbPb+
+    process.ggHiNtuplizer +
+    process.unpackedMuons +
+    process.muonAnalyzer
 )
+
+#####################################################################################
+# Select the types of jets filled
+matchJets = True             # Enables q/g and heavy flavor jet identification in MC
+jetPtMin = 15
+jetAbsEtaMax = 2.5
+
+# Choose which additional information is added to jet trees
+doHIJetID = True             # Fill jet ID and composition information branches
+doWTARecluster = False        # Add jet phi and eta for WTA axis
+doBtagging  =  False         # Note that setting to True increases computing time a lot
+
+# 0 means use original mini-AOD jets, otherwise use R value, e.g., 3,4,8
+# Add all the values you want to process to the list
+jetLabels = ["0"]
+
+# add candidate tagging for all selected jet radii
+from HeavyIonsAnalysis.JetAnalysis.setupJets_ppRef_cff import candidateBtaggingMiniAOD
+
+for jetLabel in jetLabels:
+    candidateBtaggingMiniAOD(process, isMC = False, jetPtMin = jetPtMin, jetCorrLevels = ['L2Relative', 'L3Absolute'], doBtagging = doBtagging, labelR = jetLabel)
+
+    # setup jet analyzer
+    setattr(process,"ak"+jetLabel+"PFJetAnalyzer",process.ak4PFJetAnalyzer.clone())
+    getattr(process,"ak"+jetLabel+"PFJetAnalyzer").jetTag = "selectedUpdatedPatJetsAK"+jetLabel+"PFCHSBtag"
+    getattr(process,"ak"+jetLabel+"PFJetAnalyzer").jetName = 'ak'+jetLabel+'PF'
+    getattr(process,"ak"+jetLabel+"PFJetAnalyzer").matchJets = matchJets
+    getattr(process,"ak"+jetLabel+"PFJetAnalyzer").matchTag = 'patJetsAK'+jetLabel+'PFUnsubJets'
+    getattr(process,"ak"+jetLabel+"PFJetAnalyzer").doBtagging = doBtagging
+    getattr(process,"ak"+jetLabel+"PFJetAnalyzer").doHiJetID = doHIJetID
+    getattr(process,"ak"+jetLabel+"PFJetAnalyzer").doWTARecluster = doWTARecluster
+    getattr(process,"ak"+jetLabel+"PFJetAnalyzer").jetPtMin = jetPtMin
+    getattr(process,"ak"+jetLabel+"PFJetAnalyzer").jetAbsEtaMax = cms.untracked.double(jetAbsEtaMax)
+    getattr(process,"ak"+jetLabel+"PFJetAnalyzer").rParam = 0.4 if jetLabel=='0' else float(jetLabel)*0.1
+    if doBtagging:
+        getattr(process,"ak"+jetLabel+"PFJetAnalyzer").pfJetProbabilityBJetTag = cms.untracked.string("pfJetProbabilityBJetTagsAK"+jetLabel+"PFCHSBtag")
+        getattr(process,"ak"+jetLabel+"PFJetAnalyzer").pfUnifiedParticleTransformerAK4JetTags = cms.untracked.string("pfUnifiedParticleTransformerAK4JetTagsAK"+jetLabel+"PFCHSBtag")
+    process.forest += getattr(process,"ak"+jetLabel+"PFJetAnalyzer")
 
 #########################
 # Event Selection -> add the needed filters here
@@ -169,3 +215,4 @@ process.HFAdcana = cms.EDAnalyzer("HFAdcToGeV",
 # process.hfadc = cms.Path(process.HFAdcana)
 
 process.MessageLogger.cerr.FwkReport.reportEvery = 100
+
