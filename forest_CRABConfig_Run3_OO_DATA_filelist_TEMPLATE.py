@@ -8,10 +8,8 @@ username = getUsername()
 jobTag = 'Run3_OO_IonPhysics_runXXXXXX'
 inputFilelist = '/path/to/filelist.txt'
 
-output = '/store/group/phys_heavyions/' + username + '/Run3_OO_2025Data_FastPrivateReco/'
+output = '/store/group/phys_heavyions/' + username + '/Run3_OO_2025Data_QuickForest/'
 outputServer = 'T2_CH_CERN'
-
-Data.userInputFiles = open('/path/to/local/file.txt').readlines()
 
 ###############################################################################
 
@@ -24,9 +22,7 @@ config.General.transferOutputs = True
 config.JobType.psetName = 'forest_CMSSWConfig_Run3_OO_DATA_miniAOD.py'
 config.JobType.pluginName = 'Analysis'
 config.JobType.maxMemoryMB = 5000
-config.JobType.pyCfgParams = ['noprint']
-#config.JobType.scriptExe = 'runCrabWithEmap.sh'
-#config.JobType.inputFiles = ['emap_2025_full.txt']
+config.JobType.pyCfgParams = [ 'noprint' ]
 config.JobType.allowUndistributedCMSSW = True
 
 config.Data.outputPrimaryDataset = jobTag
