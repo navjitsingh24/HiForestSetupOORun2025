@@ -22,7 +22,7 @@ config.General.transferOutputs = True
 config.JobType.psetName = 'forest_CMSSWConfig_Run3_OO_DATA_miniAOD.py'
 config.JobType.pluginName = 'Analysis'
 config.JobType.maxMemoryMB = 5000
-config.JobType.pyCfgParams = [ 'noprint' ]
+config.JobType.pyCfgParams = ['noprint']
 config.JobType.allowUndistributedCMSSW = True
 
 config.Data.outputPrimaryDataset = jobTag
