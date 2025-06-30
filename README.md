@@ -5,6 +5,8 @@
 3. Quick Reference
     - CMSSW 
     - CRAB
+    - Updating "forest_CMSSW_15_0_X"
+    - Updating ZDC emap
     - VOMS Certificate Setup
 
 --------------------------------------------------------------------------------
@@ -171,6 +173,33 @@ crab kill -d <path/to/crab_status_directory/>
 crab resubmit -d <path/to/crab_status_directory/>
 # Resubmit with max memory and max runtime
 crab resubmit --maxmemory 3000 --maxruntime 450 -d <path/to/crab_status_directory/>
+```
+
+
+## Updating "forest_CMSSW_15_0_X"
+```bash
+cd CMSSW_15_0_9/src/HeavyIonsAnalysis/
+git config pull.rebase true
+git remote add git@github.com:cmshi/cmssw.git
+git fetch cmshi forest_CMSSW_15_0_X
+git pull cmshi forest_CMSSW_15_0_X
+
+# Return to src folder and recompile:
+cd ..
+cmsenv
+scram b -j4
+```
+
+
+## Updating ZDC emap
+```bash
+cd CMSSW_15_0_9/src/HeavyIonsAnalysis/Configuration/data/
+wget https://github.com/hjbossi/ZDCOnlineMonitoring/blob/main/Conditions/emap/emap_2025_full.txt
+
+# Return to src folder and recompile:
+cd ../../../
+cmsenv
+scram b -j4 
 ```
 
 
