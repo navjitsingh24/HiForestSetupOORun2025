@@ -58,7 +58,7 @@ git pull upstream main
 ### 1.4) Download ZDC emap and copy into 
 `CMSSW_15_0_9/src/HeavyIonsAnalysis/Configuration/data/`
 ```bash
-wget https://github.com/hjbossi/ZDCOnlineMonitoring/blob/main/Conditions/emap/emap_2025_full.txt
+wget https://raw.githubusercontent.com/hjbossi/ZDCOnlineMonitoring/refs/heads/main/Conditions/emap/emap_2025_full.txt
 cp emap_2025_full.txt ../HeavyIonsAnalysis/Configuration/data/
 ```
 
@@ -194,7 +194,7 @@ scram b -j4
 ## Updating ZDC emap
 ```bash
 cd CMSSW_15_0_9/src/HeavyIonsAnalysis/Configuration/data/
-wget https://github.com/hjbossi/ZDCOnlineMonitoring/blob/main/Conditions/emap/emap_2025_full.txt
+wget https://raw.githubusercontent.com/hjbossi/ZDCOnlineMonitoring/refs/heads/main/Conditions/emap/emap_2025_full.txt
 
 # Return to src folder and recompile:
 cd ../../../
