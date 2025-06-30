@@ -36,16 +36,28 @@ scram build -j4
 > git remote add cmshi git@github.com:CmsHI/cmssw.git
 > ```
 
-### 1.3) Clone this repository
+### 1.3) Clone this repository and add your remote repo
+**On github**, fork this repository to make your own version. This will be used
+to document your forest configs.
+
+Next, clone your forked version of this repo:
 ```bash
-git clone git@github.com:jdlang/HiForestSetupOORun2025.git
+git clone git@github.com:<your_git_username>/HiForestSetupOORun2025.git
 cd HiForestSetupOORun2025/
 ```
 
-### 1.4) Download ZDC emap and copy into `CMSSW_15_0_9/src/HeavyIonsAnalysis/Configuration/data/`
+Finally, add the original repo as "upstream":
+```bash
+git remote add upstream git@github.com:jdlang/HiForestSetupOORun2025.git
+git fetch upstream
+git pull upstream main
+```
+
+### 1.4) Download ZDC emap and copy into 
+`CMSSW_15_0_9/src/HeavyIonsAnalysis/Configuration/data/`
 ```bash
 wget https://github.com/hjbossi/ZDCOnlineMonitoring/blob/main/Conditions/emap/emap_2025_full.txt
-cp emap_2025_full.txt HeavyIonsAnalysis/Configuration/data/
+cp emap_2025_full.txt ../HeavyIonsAnalysis/Configuration/data/
 ```
 
 --------------------------------------------------------------------------------
