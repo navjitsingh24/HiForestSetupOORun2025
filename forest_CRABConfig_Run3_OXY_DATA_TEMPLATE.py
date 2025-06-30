@@ -20,7 +20,7 @@ config.General.requestName = jobTag
 config.General.workArea = 'CrabWorkArea'
 config.General.transferOutputs = True
 
-config.JobType.psetName = 'forest_CMSSWConfig_Run3_OO_DATA_miniAOD.py'
+config.JobType.psetName = 'forest_CMSSWConfig_Run3_OXY_DATA_miniAOD.py'
 config.JobType.pluginName = 'Analysis'
 config.JobType.maxMemoryMB = 5000
 config.JobType.pyCfgParams = [ 'noprint' ]

@@ -26,7 +26,7 @@ process.HiForestInfo.info = cms.vstring("HiForest, miniAOD, 150X, data")
 process.source = cms.Source("PoolSource",
     duplicateCheckMode = cms.untracked.string("noDuplicateCheck"),
     fileNames = cms.untracked.vstring(
-         'file:/eos/cms/store/group/phys_heavyions/wangj/RECO2025/miniaod_PhysicsIonPhysics0_393767/reco_run393767_ls0021_streamPhysicsIonPhysics0_StorageManager.root'
+         'file:/eos/cms/store/group/phys_heavyions/wangj/RECO2025/miniaod_PhysicsIonPhysics0_393846/reco_run393846_ls0001_streamPhysicsIonPhysics0_StorageManager.root'
     ),
 )
 
@@ -212,7 +212,7 @@ process.HFAdcana = cms.EDAnalyzer("HFAdcToGeV",
     minimized = cms.untracked.bool(True),
     fillhf = cms.bool(False) # only turn this on when you have or know how to produce "towerMaker"
 )
-# process.hfadc = cms.Path(process.HFAdcana)
+process.hfadc = cms.Path(process.HFAdcana)
 
 process.MessageLogger.cerr.FwkReport.reportEvery = 100
 
