@@ -115,6 +115,8 @@ process.unpackedMuons.muonSelectors = cms.vstring()
 # to prevent crash related to HcalSeverityLevelComputerRcd record
 process.load("RecoLocalCalo.HcalRecAlgos.hcalRecAlgoESProd_cfi")
 process.load('HeavyIonsAnalysis.ZDCAnalysis.ZDCAnalyzersPbPb_cff')
+process.load('HeavyIonsAnalysis.ZDCAnalysis.FSCAnalyzers_cff')
+process.load('HeavyIonsAnalysis.ZDCAnalysis.PPSAnalyzers_cff')
 
 # =============================================================================
 # ==================== modification needed for the fsc data ===================
@@ -152,7 +154,9 @@ process.forest = cms.Path(
     process.trackSequencePP +
     process.particleFlowAnalyser +
     process.hiEvtAnalyzer +
-    process.zdcSequencePbPb+
+    process.zdcSequencePbPb +
+    process.fscSequence +
+    process.ppsSequence +
     process.ggHiNtuplizer +
     process.unpackedMuons +
     process.muonAnalyzer
