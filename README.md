@@ -76,7 +76,7 @@ git pull upstream main
 ### 2.0) Edit CRABConfig settings
 Make a **copy** of the CRABConfig file with an appropriate name:
 ```bash
-cp forest_CRABConfig_Run3_OO_DATA_TEMPLATE.py forest_CRABConfig_Run3_OO_DATA_<your_label>.py
+cp forest_CRABConfig_Run3_OXY_DATA_TEMPLATE.py forest_CRABConfig_Run3_OXY_DATA_<your_label>.py
 ```
 
 If you want to process over a local file or a list of files, use
@@ -118,9 +118,13 @@ voms-proxy-init -rfc -voms cms
 > ```
 > This will let you initialize VOMS just by running the command: `proxy`
 
-### 2.2) Submit CRAB jobs
+### 2.2) Submit CRAB jobs (may need to be from `src`)
 ```bash
-crab submit -c forest_CRABConfig_Run3_OO_DATA_<your_label>.py
+cd ..
+# Copy CMSSW configs to "src"
+cp HiForestSetupOORun2025/forest_CMSSWConfig* ..
+# Run CRAB configs from "src"
+crab submit -c HiForestSetupOORun2025/forest_CRABConfig_Run3_OO_DATA_<your_label>.py
 ```
 
 ### 2.3) Track status of CRAB jobs
