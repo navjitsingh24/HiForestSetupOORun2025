@@ -78,13 +78,16 @@ Make a **copy** of the CRABConfig file with an appropriate name:
 ```bash
 cp forest_CRABConfig_Run3_OO_DATA_TEMPLATE.py forest_CRABConfig_Run3_OO_DATA_<your_label>.py
 ```
-> [!TIP]
-> If you want to process over a local file or a list of files, use
-> `forest_CRABConfig_Run3_OO_DATA_filelist_TEMPLATE.py` as your template
-> instead. Save your file(s) to a `.txt` file using a command like:
-> ```bash
-> ls /path/to/files/*.root > filelist.txt
-> ```
+
+If you want to process over a local file or a list of files, use
+`forest_CRABConfig_Run3_OO_DATA_filelist_TEMPLATE.py` as your template 
+instead. Save your file(s) to a `.txt` file using a command like:
+```bash
+ls /path/to/files/*.root > filelist_<your_label>.txt
+# If the miniaod files are on /eos, you MUST remove "/eos/cms" from
+# the start of the paths:
+sed -i "s|/eos/cms||" filelist_<your_label>.txt
+```
 
 Modify the input and output paths in the config (example shown below):
 ```Python
