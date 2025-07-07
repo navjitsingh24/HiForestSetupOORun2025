@@ -26,7 +26,7 @@ process.HiForestInfo.info = cms.vstring("HiForest, miniAOD, 150X, data")
 process.source = cms.Source("PoolSource",
     duplicateCheckMode = cms.untracked.string("noDuplicateCheck"),
     fileNames = cms.untracked.vstring(
-         'file:/eos/cms/store/group/phys_heavyions/wangj/RECO2025/miniaod_PhysicsIonPhysics0_393952/reco_run393952_ls0400_streamPhysicsIonPhysics0_StorageManager.root'
+         'file:/eos/cms/store/group/phys_heavyions/wangj/RECO2025/miniaod_PhysicsIonPhysics0_394075/reco_run394075_ls0050_streamPhysicsIonPhysics0_StorageManager.root'
     ),
 )
 
@@ -82,7 +82,6 @@ process.particleFlowAnalyser.ptMin = cms.double(0.)
 process.particleFlowAnalyser.absEtaMax = cms.double(6.)
 process.load('HeavyIonsAnalysis.EventAnalysis.hievtanalyzer_data_cfi')
 process.hiEvtAnalyzer.doHFfilters = cms.bool(False)
-process.load('HeavyIonsAnalysis.EventAnalysis.hltanalysis_cfi')
 process.load('HeavyIonsAnalysis.EventAnalysis.skimanalysis_cfi')
 process.load('HeavyIonsAnalysis.EventAnalysis.hltobject_cfi')
 process.hltobject.triggerNames = cms.vstring()
