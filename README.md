@@ -21,8 +21,8 @@
 
 ### 1.1) Install CMSSW
 ```bash
-cmsrel CMSSW_15_0_9
-cd CMSSW_15_0_9/src
+cmsrel CMSSW_15_0_9_patch2
+cd CMSSW_15_0_9_patch2/src
 cmsenv
 ```
 
@@ -38,21 +38,7 @@ scram build -j4
 > git remote add cmshi git@github.com:CmsHI/cmssw.git
 > ```
 
-### 1.3) Add ADC
-```bash
-git clone git@github.com:boundino/HltL1Run.git
-ln -s HltL1Run/L1/ADC .
-scram b -j4
-```
-
-### 1.4) Download ZDC emap and copy into 
-`CMSSW_15_0_9/src/HeavyIonsAnalysis/Configuration/data/`
-```bash
-wget https://github.com/hjbossi/ZDCOnlineMonitoring/blob/main/Conditions/emap/emap_2025_full.txt
-cp emap_2025_full.txt ../HeavyIonsAnalysis/Configuration/data/
-```
-
-### 1.5) Clone this repository and add your remote repo
+### 1.3) Clone this repository and add your remote repo
 **On github**, fork this repository to make your own version. This will be used
 to document your forest configs.
 
@@ -192,7 +178,7 @@ crab resubmit --maxmemory 3000 --maxruntime 450 -d <path/to/crab_status_director
 
 ## Updating "forest_CMSSW_15_0_X"
 ```bash
-cd CMSSW_15_0_9/src/HeavyIonsAnalysis/
+cd CMSSW_15_0_9_patch2/src/HeavyIonsAnalysis/
 git config pull.rebase true
 git remote add git@github.com:cmshi/cmssw.git
 git fetch cmshi forest_CMSSW_15_0_X
@@ -202,18 +188,6 @@ git pull cmshi forest_CMSSW_15_0_X
 cd ..
 cmsenv
 scram b -j4
-```
-
-
-## Updating ZDC emap
-```bash
-cd CMSSW_15_0_9/src/HeavyIonsAnalysis/Configuration/data/
-wget https://raw.githubusercontent.com/hjbossi/ZDCOnlineMonitoring/refs/heads/main/Conditions/emap/emap_2025_full.txt
-
-# Return to src folder and recompile:
-cd ../../../
-cmsenv
-scram b -j4 
 ```
 
 
