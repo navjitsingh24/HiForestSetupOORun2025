@@ -26,7 +26,7 @@ process.HiForestInfo.info = cms.vstring("HiForest, miniAOD, 150X, data")
 process.source = cms.Source("PoolSource",
     duplicateCheckMode = cms.untracked.string("noDuplicateCheck"),
     fileNames = cms.untracked.vstring(
-         '/store/hidata/OORun2025/IonPhysics0/RAW/v1/000/394/075/00000/0521af1f-18a9-402a-b6e3-82cb07916fdd.root'
+         '/store/hidata/OORun2025/IonPhysics0/MINIAOD/PromptReco-v1/000/394/075/00000/5bd88e80-d045-4c6d-b53c-7e2f73e01d98.root'
     )
 )
 
@@ -71,6 +71,7 @@ process.TFileService = cms.Service("TFileService",
 # )
 
 # process.output_path = cms.EndPath(process.output)
+
 ###############################################################################
 
 # event analysis
@@ -96,6 +97,7 @@ process.load("TrackingTools.TransientTrack.TransientTrackBuilder_cfi")
 ################################
 # jet reco sequence
 process.load('HeavyIonsAnalysis.JetAnalysis.ak4PFJetSequence_ppref_data_cff')
+process.load('HeavyIonsAnalysis.JetAnalysis.akCs4PFJetSequence_pponPbPb_data_cff')
 ################################
 # tracks
 process.load("HeavyIonsAnalysis.TrackAnalysis.TrackAnalyzers_cff")
@@ -140,16 +142,16 @@ process.forest = cms.Path(
     process.HiForestInfo +
     process.centralityBin +
     process.hltanalysis +
-   # process.hltobject +
-    process.l1object +
-    process.l1MetFilterRecoTree +
-    process.trackSequencePP +
-   process.particleFlowAnalyser +
-    process.hiEvtAnalyzer +
+    # process.hltobject +
+   # process.l1object +
+   # process.l1MetFilterRecoTree +
+    process.trackSequencePbPb +
+   # process.particleFlowAnalyser +
+    process.hiEvtAnalyzer
   #  process.zdcSequencePbPb +
    # process.fscSequence +
    # process.ppsSequence +
-    process.ggHiNtuplizer
+   # process.ggHiNtuplizer 
   #  process.jetanalyzer
    # process.unpackedMuons +
    # process.muonAnalyzer
@@ -181,7 +183,7 @@ for jetLabel in jetLabels:
     getattr(process,"ak"+jetLabel+"PFJetAnalyzer").jetTag = "selectedUpdatedPatJetsAK"+jetLabel+"PFCHSBtag"
     getattr(process,"ak"+jetLabel+"PFJetAnalyzer").jetName = 'ak'+jetLabel+'PF'
     getattr(process,"ak"+jetLabel+"PFJetAnalyzer").matchJets = matchJets
-   getattr(process,"ak"+jetLabel+"PFJetAnalyzer").matchTag = 'patJetsAK'+jetLabel+'PFUnsubJets'
+    getattr(process,"ak"+jetLabel+"PFJetAnalyzer").matchTag = 'patJetsAK'+jetLabel+'PFUnsubJets'
     getattr(process,"ak"+jetLabel+"PFJetAnalyzer").doBtagging = doBtagging
     getattr(process,"ak"+jetLabel+"PFJetAnalyzer").doHiJetID = doHIJetID
     getattr(process,"ak"+jetLabel+"PFJetAnalyzer").doWTARecluster = doWTARecluster
@@ -193,6 +195,28 @@ for jetLabel in jetLabels:
         getattr(process,"ak"+jetLabel+"PFJetAnalyzer").pfUnifiedParticleTransformerAK4JetTags = cms.untracked.string("pfUnifiedParticleTransformerAK4JetTagsAK"+jetLabel+"PFCHSBtag")
     process.forest += getattr(process,"ak"+jetLabel+"PFJetAnalyzer")
 
+jetLabelsCs = ["4"]
+
+from HeavyIonsAnalysis.JetAnalysis.setupJets_PbPb_cff import candidateBtaggingMiniAODPbPb
+
+for jetLabelCs in jetLabelsCs:
+    candidateBtaggingMiniAODPbPb(process, isMC = False, jetPtMin = jetPtMin, jetCorrLevels = ['L2Relative', 'L3Absolute'], doBtagging = doBtagging, labelR = jetLabelCs)
+
+    setattr(process,"akCs"+jetLabelCs+"PFJetAnalyzer",process.akCs4PFJetAnalyzer.clone())
+    getattr(process,"akCs"+jetLabelCs+"PFJetAnalyzer").jetTag =  "selectedUpdatedPatJetsAK"+jetLabelCs+"PFBtag"
+    getattr(process,"akCs"+jetLabelCs+"PFJetAnalyzer").jetName = 'akCs'+jetLabelCs+'PF'
+    getattr(process,"akCs"+jetLabelCs+"PFJetAnalyzer").matchJets = matchJets
+    getattr(process,"akCs"+jetLabelCs+"PFJetAnalyzer").matchTag = 'patJetsAK'+jetLabelCs+'PFUnsubJets'
+    getattr(process,"akCs"+jetLabelCs+"PFJetAnalyzer").doBtagging = doBtagging
+    getattr(process,"akCs"+jetLabelCs+"PFJetAnalyzer").doHiJetID = doHIJetID
+    getattr(process,"akCs"+jetLabelCs+"PFJetAnalyzer").doWTARecluster = doWTARecluster
+    getattr(process,"akCs"+jetLabelCs+"PFJetAnalyzer").jetPtMin = jetPtMin
+    getattr(process,"akCs"+jetLabelCs+"PFJetAnalyzer").jetAbsEtaMax = cms.untracked.double(jetAbsEtaMax)
+    getattr(process,"akCs"+jetLabelCs+"PFJetAnalyzer").rParam = 0.4 if jetLabelCs=="0" else  float(jetLabelCs.replace("Flow",""))*0.1
+    if doBtagging:
+        getattr(process,"akCs"+jetLabelCs+"PFJetAnalyzer").pfJetProbabilityBJetTag = cms.untracked.string("pfJetProbabilityBJetTagsAK"+jetLabelCs+"PFBtag")
+        getattr(process,"akCs"+jetLabelCs+"PFJetAnalyzer").pfUnifiedParticleTransformerAK4JetTags = cms.untracked.string("pfUnifiedParticleTransformerAK4JetTagsAK"+jetLabelCs+"PFBtag")
+    process.forest += getattr(process,"akCs"+jetLabelCs+"PFJetAnalyzer")
 #########################
 # Event Selection -> add the needed filters here
 #########################
@@ -203,12 +227,12 @@ process.pprimaryVertexFilter = cms.Path(process.primaryVertexFilter)
 process.load('HeavyIonsAnalysis.EventAnalysis.hffilterPF_cfi')
 process.pAna = cms.EndPath(process.skimanalysis)
 
-process.HFAdcana = cms.EDAnalyzer("HFAdcToGeV",
-    digiLabel = cms.untracked.InputTag("hcalDigis"),
+#process.HFAdcana = cms.EDAnalyzer("HFAdcToGeV",
+#    digiLabel = cms.untracked.InputTag("hcalDigis"),
     #digiLabel = cms.untracked.InputTag("simHcalUnsuppressedDigis","HFQIE10DigiCollection"),
-    minimized = cms.untracked.bool(True),
-    fillhf = cms.bool(False) # only turn this on when you have or know how to produce "towerMaker"
-)
-process.hfadc = cms.Path(process.HFAdcana)
+#    minimized = cms.untracked.bool(True),
+#    fillhf = cms.bool(False) # only turn this on when you have or know how to produce "towerMaker"
+#)
+#process.hfadc = cms.Path(process.HFAdcana)
 
 process.MessageLogger.cerr.FwkReport.reportEvery = 100
